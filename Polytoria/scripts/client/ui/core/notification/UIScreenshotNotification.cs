@@ -4,7 +4,6 @@
 
 using Godot;
 using Polytoria.Datamodel;
-using System.Threading.Tasks;
 
 namespace Polytoria.Client.UI.Notification;
 
@@ -23,7 +22,7 @@ public partial class UIScreenshotNotification : UINotificationBase
 
 			World game = NotificationCenter.CoreUI.Root;
 
-			ViewButton.Pressed += () => Task.Run(() => game.Capture.ViewCurrentPhoto());
+			ViewButton.Pressed += () => Callable.From(() => game.Capture.ViewCurrentPhoto()).CallDeferred();
 		}
 		else
 		{
