@@ -5,6 +5,7 @@
 using Godot;
 using Polytoria.Attributes;
 using Polytoria.Creator.Managers;
+using Polytoria.Creator.Settings;
 using Polytoria.Datamodel;
 using Polytoria.Datamodel.Creator;
 using Polytoria.Datamodel.Interfaces;
@@ -94,7 +95,7 @@ public partial class ExplorerItemContextMenu : ContextMenu
 		{
 			case 1: // Add child
 				{
-					InsertMenuPopup menu = CreatorService.Interface.OpenInsertMenu(Target);
+					CreatorService.Interface.OpenInsertMenu(Target);
 					break;
 				}
 			case 2: // Add script
@@ -158,7 +159,7 @@ public partial class ExplorerItemContextMenu : ContextMenu
 					{
 						if (Target.EditableChildren)
 						{
-							if (!await CreatorService.Interface.PromptConfirmation("Closing this model will discard any unsaved changes.", dismissKey: "Popups.CloseModelWarning")) return;
+							if (!await CreatorService.Interface.PromptConfirmation("Closing this model will discard any unsaved changes.", dismissKey: CreatorSettingKeys.Popups.CloseModelWarning)) return;
 						}
 						Target?.EditableChildren = !Target.EditableChildren;
 					}

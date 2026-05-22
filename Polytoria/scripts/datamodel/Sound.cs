@@ -8,6 +8,10 @@ using Polytoria.Datamodel.Resources;
 using Polytoria.Networking;
 using Polytoria.Scripting;
 
+#if CREATOR
+using Polytoria.Creator.Spatial;
+#endif
+
 namespace Polytoria.Datamodel;
 
 [Instantiable]
@@ -124,6 +128,20 @@ public sealed partial class Sound : Dynamic
 		set
 		{
 			_loop = value;
+
+			switch (_currentStream)
+			{
+				case AudioStreamMP3 aStream:
+					aStream.LoopOffset = 0;
+					aStream.Loop = value;
+					break;
+				case AudioStreamOggVorbis aStream:
+					aStream.LoopOffset = 0;
+					aStream.Loop = value;
+					break;
+					// unused in Polytoria
+					//case AudioStreamWav aStream:
+			}
 			OnPropertyChanged();
 		}
 	}
@@ -204,6 +222,9 @@ public sealed partial class Sound : Dynamic
 	public override void Init()
 	{
 		CreateAudioPlayer();
+#if CREATOR
+		GDNode.AddChild(new SpatialIcon(ClassName), @internal: Node.InternalMode.Back);
+#endif
 		base.Init();
 	}
 
@@ -245,15 +266,8 @@ public sealed partial class Sound : Dynamic
 
 	private void CleanupAudioPlayer()
 	{
-		if (_audioPlayer != null)
-		{
-			_audioPlayer.Finished -= OnPlayerFinished;
-		}
-
-		if (_audioPlayer3D != null)
-		{
-			_audioPlayer3D.Finished -= OnPlayerFinished;
-		}
+		_audioPlayer?.Finished -= OnPlayerFinished;
+		_audioPlayer3D?.Finished -= OnPlayerFinished;
 
 		_audioPlayer = null;
 		_audioPlayer3D = null;
@@ -296,18 +310,11 @@ public sealed partial class Sound : Dynamic
 
 	private void OnPlayerFinished()
 	{
-		// Loop the audio
-		if (Loop)
+		// Event is not fired on looping sound
+		Playing = false;
+		if (HasAuthority)
 		{
-			Play();
-		}
-		else
-		{
-			Playing = false;
-			if (HasAuthority)
-			{
-				ServerIsPlaying = false;
-			}
+			ServerIsPlaying = false;
 		}
 	}
 
@@ -474,6 +481,7 @@ public sealed partial class Sound : Dynamic
 		_currentStream = (AudioStream)audio;
 		_audioPlayer?.Stream = (AudioStream)audio;
 		_audioPlayer3D?.Stream = (AudioStream)audio;
+		Loop = _loop; // reapply to new stream
 
 		Loaded.Invoke();
 
