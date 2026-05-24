@@ -79,8 +79,8 @@ public partial class DebugConsole : Control
 			GD.PrintErr("DebugConsole: Could not find ConsoleFilters node!");
 		}
 
-	    int size = _richLabel.GetThemeFontSize("normal_font_size", "Label");
-	    _currentFontSize = size > 0 ? size : 16;
+		int size = _richLabel.GetThemeFontSize("normal_font_size", "Label");
+		_currentFontSize = size > 0 ? size : 16;
 
 	}
 
