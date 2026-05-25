@@ -297,7 +297,7 @@ public partial class DatamodelBridge : Node3D
 		if (batch.Count == 0)
 		{
 			Rid rid = batch.Rid;
-			Callable.From(() => Godot.RenderingServer.FreeRid(rid).CallDeferred();
+			Callable.From(() => Godot.RenderingServer.FreeRid(rid)).CallDeferred();
 			_batches.Remove(handle.Key);
 		}
 
