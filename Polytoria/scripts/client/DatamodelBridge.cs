@@ -189,7 +189,14 @@ public partial class DatamodelBridge : Node3D
 	{
 		if (instance is Part part)
 		{
-			AddPart(part);
+			if (OS.GetMainThreadId() == (ulong)System.Environment.CurrentManagedThreadId)
+			{
+				AddPart(part);
+			}
+			else
+			{
+				Callable.From(() => AddPart(part)).CallDeferred();
+			}
 		}
 	}
 
@@ -289,7 +296,8 @@ public partial class DatamodelBridge : Node3D
 
 		if (batch.Count == 0)
 		{
-			RenderingServer.FreeRid(batch.Rid);
+			Rid rid = batch.Rid;
+			Callable.From(() => Godot.RenderingServer.FreeRid(rid).CallDeferred();
 			_batches.Remove(handle.Key);
 		}
 
