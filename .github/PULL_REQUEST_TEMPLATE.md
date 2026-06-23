@@ -14,6 +14,7 @@ Related to #
 - [ ] Refactor
 - [ ] Tests
 - [ ] Build/export/tooling
+- [ ] Style Formatting
 - [ ] Other
 
 ## Area affected
