@@ -603,7 +603,7 @@ public sealed partial class Player : NPC
 	{
 		for (int i = 0; i < CharBody3D.GetSlideCollisionCount(); i++)
 		{
-			KinematicCollision3D collision = CharBody3D.GetSlideCollision(i);
+			KinematicCollision3D? collision = CharBody3D.GetSlideCollision(i);
 
 			if (GetNetObjFromProxy((Node)collision.GetCollider()) is Physical body)
 			{
