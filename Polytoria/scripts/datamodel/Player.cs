@@ -605,7 +605,7 @@ public sealed partial class Player : NPC
 		{
 			KinematicCollision3D? collision = CharBody3D.GetSlideCollision(i);
 
-			if (GetNetObjFromProxy((Node)collision.GetCollider()) is Physical body)
+			if (collision != null && GetNetObjFromProxy((Node)collision.GetCollider()) is Physical body)
 			{
 				// Push the rigidbody
 				body.ApplyForceFromPlayer(-collision.GetNormal());
