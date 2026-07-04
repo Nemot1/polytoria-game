@@ -168,13 +168,13 @@ public sealed partial class Image3D : Dynamic
 		get => _doubleSided;
 		set
 		{
+			_doubleSided = value;
 			// Fixes freeze or at least lowers chance on freeze
 			if (_material != null)
 			{
-				_doubleSided = value;
 				_material.CullMode = value ? BaseMaterial3D.CullModeEnum.Disabled : BaseMaterial3D.CullModeEnum.Back;
-				OnPropertyChanged();
 			}
+			OnPropertyChanged();
 		}
 	}
 
